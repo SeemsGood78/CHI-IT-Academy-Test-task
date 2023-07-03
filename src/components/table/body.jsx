@@ -1,0 +1,161 @@
+import React, { useEffect, useState } from "react"
+import Pagination from "./footer"
+import SearchBar from "./header";
+import Dropdown from "./dropdown"
+import EditModal from "./modals/Edit";
+import DeleteModal from "./modals/Delete";
+import AddModal from "./modals/AddCar";
+
+const itemsPerPage = 16;
+const options = ["Edit", "Delete"];
+
+export const Table = () => {
+    const [cars, setCars] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [selectedCar, setSelectedCar] = useState(null);
+
+    const handleOptionSelect = (option, car) => {
+        console.log("Selected option:", option);
+        console.log("Selected car:", car);
+
+        if (option === "Edit") {
+            setEditModalOpen(true);
+            setSelectedCar(car);
+        } else if (option === "Delete") {
+            setDeleteModalOpen(true);
+            setSelectedCar(car);
+        }
+    };
+
+    const fetchCarsData = () => {
+        fetch("https://myfakeapi.com/api/cars/")
+            .then(response => response.json())
+            .then(data => {
+                setCars(data)
+            })
+    }
+
+    useEffect(() => {
+        fetchCarsData()
+    }, [])
+
+    const closeDeleteModal = () => {
+        setDeleteModalOpen(false);
+        setSelectedCar(null);
+    };
+
+    const carArrays = Object.values(cars ?? {}).flat();
+
+    const indexOfLastCar = currentPage * itemsPerPage;
+    const indexOfFirstCar = indexOfLastCar - itemsPerPage;
+    const currentCars = carArrays.slice(indexOfFirstCar, indexOfLastCar);
+
+    const onPageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const filteredCarsArray = carArrays.filter((car) =>
+        (car.car?.toLowerCase() ?? '').includes(search?.toLowerCase() ?? '') ||
+        (car.car_model?.toLowerCase() ?? '').includes(search?.toLowerCase() ?? '') ||
+        (car.car_vin?.toLowerCase() ?? '').includes(search?.toLowerCase() ?? '') ||
+        (car.car_color?.toLowerCase() ?? '').includes(search?.toLowerCase() ?? '') ||
+        (car.car_model_year?.toString() ?? '').includes(search?.toLowerCase() ?? '') ||
+        (car.price?.toString() ?? '').includes(search?.toLowerCase() ?? '')
+    );
+
+
+    const currentFiltredCars = filteredCarsArray.slice(indexOfFirstCar, indexOfLastCar);
+    const filteredCars = search ? currentFiltredCars : currentCars;
+    const totalCars = search ? filteredCarsArray.length : carArrays.length;
+
+    const handleDelete = (carId) => {
+        const updatedCars = carArrays.filter((car) => car.id !== carId);
+        setCars(updatedCars);
+    };
+
+    const saveChanges = (updatedCar) => {
+        const updatedCars = carArrays.map((car) => {
+            if (car.id === updatedCar.id) {
+                return updatedCar;
+            }
+            return car;
+        });
+        setCars(updatedCars);
+    };
+    const openAddModal = () => {
+        setAddModalOpen(true);
+    };
+
+    const saveCarChanges = (updatedCar) => {
+        setCars((prevCars) => {
+            console.log(prevCars.cars)
+            const updatedCars = [...prevCars.cars];
+            const index = updatedCars.findIndex((car) => car.id === updatedCar.id);
+            if (index !== -1) {
+                updatedCars[index] = updatedCar;
+            } else {
+                updatedCars.unshift(updatedCar);
+            }
+            return updatedCars;
+        });
+    };
+
+
+    return (
+        <div className="wrapper">
+            <SearchBar onSearch={setSearch} />
+            <table className="styled-table">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Company</th>
+                        <th>Model</th>
+                        <th>VIN</th>
+                        <th>Color</th>
+                        <th>Year</th>
+                        <th>Price</th>
+                        <th>Availability</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredCars.map((car, index) => (
+                        <tr key={car.id}>
+                            <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                            <td>{car.car}</td>
+                            <td>{car.car_model}</td>
+                            <td>{car.car_vin}</td>
+                            <td>{car.car_color}</td>
+                            <td>{car.car_model_year}</td>
+                            <td>{car.price}</td>
+                            <td>{car.availability.toString()}</td>
+                            <Dropdown options={options} onSelect={handleOptionSelect} car={car} />
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <Pagination
+                currentPage={currentPage}
+                total={totalCars}
+                limit={itemsPerPage}
+                onPageChange={onPageChange}
+            />
+            <button onClick={openAddModal}>
+                Add Car
+            </button>
+            {addModalOpen && (
+                <AddModal closeModal={() => setAddModalOpen(false)} saveChanges={saveCarChanges} />
+            )}
+            {editModalOpen && (
+                <EditModal car={selectedCar} closeModal={() => setEditModalOpen(false)} saveChanges={saveChanges} />
+            )}
+            {deleteModalOpen && (
+                <DeleteModal car={selectedCar} closeModal={closeDeleteModal} onDelete={handleDelete} />
+            )}
+        </div>
+    );
+};
