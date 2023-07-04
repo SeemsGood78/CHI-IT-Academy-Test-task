@@ -16,37 +16,35 @@ const EditModal = ({ car, closeModal, saveChanges }) => {
         closeModal();
     };
 
-    
-
     return (
         <div className="modal">
             <div className="modal-content">
                 <h2>Edit Car</h2>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>Company</label>
                     <input type="text" value={car.car} disabled />
                 </div>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>Model</label>
                     <input type="text" value={car.car_model} disabled />
                 </div>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>VIN</label>
                     <input type="text" value={car.car_vin} disabled />
                 </div>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>Color</label>
                     <input type="text" value={color} onChange={(e) => setColor(e.target.value)} />
                 </div>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>Year</label>
                     <input type="text" value={car.car_model_year} disabled />
                 </div>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>Price</label>
                     <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} />
                 </div>
-                <div className="form-group">
+                <div className="modal-content-form">
                     <label>Availability</label>
                     <input
                         type="checkbox"
@@ -54,7 +52,7 @@ const EditModal = ({ car, closeModal, saveChanges }) => {
                         onChange={(e) => setAvailability(e.target.checked)}
                     />
                 </div>
-                <div className="modal-buttons">
+                <div className="modal-content-buttons">
                     <button className="btn btn-cancel" onClick={closeModal}>
                         Cancel
                     </button>

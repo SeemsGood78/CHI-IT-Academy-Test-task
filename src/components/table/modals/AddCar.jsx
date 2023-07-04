@@ -34,7 +34,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
       <div className="modal">
         <div className="modal-content">
           <h2>Add Car</h2>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>Company</label>
             <input
               type="text"
@@ -42,7 +42,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setCar(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>Model</label>
             <input
               type="text"
@@ -50,7 +50,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setCar_model(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>VIN</label>
             <input
               type="text"
@@ -58,7 +58,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setCar_vin(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>Color</label>
             <input
               type="text"
@@ -66,7 +66,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setCar_color(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>Year</label>
             <input
               type="text"
@@ -74,7 +74,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setCar_model_year(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>Price</label>
             <input
               type="text"
@@ -82,7 +82,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setPrice(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div className="modal-content-form">
             <label>Availability</label>
             <input
               type="checkbox"
@@ -90,7 +90,7 @@ const AddModal = ({ closeModal, saveChanges }) => {
               onChange={(e) => setAvailability(e.target.checked)}
             />
           </div>
-          <div className="modal-buttons">
+          <div className="modal-content-buttons">
             <button className="btn btn-cancel" onClick={closeModal}>
               Cancel
             </button>

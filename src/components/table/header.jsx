@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, setCurrentPage}) => {
     const [searchText, setSearchText] = useState("");
 
     const handleSearch = () => {
@@ -10,17 +10,18 @@ const SearchBar = ({ onSearch }) => {
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {
             handleSearch();
+            setCurrentPage(1);
         }
     };
 
     return (
-        <div>
-            <input
+        <div className="search">
+            <input className="search-input"
                 type="text"
                 placeholder="Search..."
                 value={searchText}
                 onChange={e => setSearchText(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
             />
         </div>
     );

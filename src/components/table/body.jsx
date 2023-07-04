@@ -19,8 +19,6 @@ export const Table = () => {
     const [selectedCar, setSelectedCar] = useState(null);
 
     const handleOptionSelect = (option, car) => {
-        console.log("Selected option:", option);
-        console.log("Selected car:", car);
 
         if (option === "Edit") {
             setEditModalOpen(true);
@@ -31,32 +29,26 @@ export const Table = () => {
         }
     };
 
-    const fetchCarsData = () => {
-        fetch("https://myfakeapi.com/api/cars/")
-            .then(response => response.json())
-            .then(data => {
-                setCars(data)
-            })
-    }
-
     useEffect(() => {
-        fetchCarsData()
-    }, [])
-
-    const closeDeleteModal = () => {
-        setDeleteModalOpen(false);
-        setSelectedCar(null);
-    };
+        const storedCars = JSON.parse(localStorage.getItem("cars"));
+        console.log(storedCars);
+        if (storedCars) {
+            setCars(storedCars);
+        } else {
+            fetch("https://myfakeapi.com/api/cars/")
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem("cars", JSON.stringify(data))
+                    setCars(data)
+                })
+        };
+    }, []);
 
     const carArrays = Object.values(cars ?? {}).flat();
 
     const indexOfLastCar = currentPage * itemsPerPage;
     const indexOfFirstCar = indexOfLastCar - itemsPerPage;
     const currentCars = carArrays.slice(indexOfFirstCar, indexOfLastCar);
-
-    const onPageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
 
     const filteredCarsArray = carArrays.filter((car) =>
         (car.car?.toLowerCase() ?? '').includes(search?.toLowerCase() ?? '') ||
@@ -67,14 +59,19 @@ export const Table = () => {
         (car.price?.toString() ?? '').includes(search?.toLowerCase() ?? '')
     );
 
-
     const currentFiltredCars = filteredCarsArray.slice(indexOfFirstCar, indexOfLastCar);
     const filteredCars = search ? currentFiltredCars : currentCars;
+
     const totalCars = search ? filteredCarsArray.length : carArrays.length;
+
+    const onPageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const handleDelete = (carId) => {
         const updatedCars = carArrays.filter((car) => car.id !== carId);
         setCars(updatedCars);
+        localStorage.setItem("cars", JSON.stringify(updatedCars));
     };
 
     const saveChanges = (updatedCar) => {
@@ -85,29 +82,24 @@ export const Table = () => {
             return car;
         });
         setCars(updatedCars);
+        localStorage.setItem("cars", JSON.stringify(updatedCars));
     };
+
     const openAddModal = () => {
         setAddModalOpen(true);
     };
 
     const saveCarChanges = (updatedCar) => {
-        setCars((prevCars) => {
-            console.log(prevCars.cars)
-            const updatedCars = [...prevCars.cars];
-            const index = updatedCars.findIndex((car) => car.id === updatedCar.id);
-            if (index !== -1) {
-                updatedCars[index] = updatedCar;
-            } else {
-                updatedCars.unshift(updatedCar);
-            }
-            return updatedCars;
-        });
+        const updatedCars = [...carArrays];
+        const index = updatedCars.findIndex((car) => car.id === updatedCar.id);
+        index !== -1 ? updatedCars[index] = updatedCar : updatedCars.unshift(updatedCar);
+        setCars(updatedCars);
+        localStorage.setItem("cars", JSON.stringify(updatedCars));
     };
-
 
     return (
         <div className="wrapper">
-            <SearchBar onSearch={setSearch} />
+            <SearchBar onSearch={setSearch} setCurrentPage={setCurrentPage} />
             <table className="styled-table">
                 <thead>
                     <tr>
@@ -138,15 +130,17 @@ export const Table = () => {
                     ))}
                 </tbody>
             </table>
-            <Pagination
-                currentPage={currentPage}
-                total={totalCars}
-                limit={itemsPerPage}
-                onPageChange={onPageChange}
-            />
-            <button onClick={openAddModal}>
-                Add Car
-            </button>
+            <div className="separate">
+                <Pagination
+                    currentPage={currentPage}
+                    total={totalCars}
+                    limit={itemsPerPage}
+                    onPageChange={onPageChange}
+                />
+                <button onClick={openAddModal} className="add-btn">
+                    Add Car
+                </button>
+            </div>
             {addModalOpen && (
                 <AddModal closeModal={() => setAddModalOpen(false)} saveChanges={saveCarChanges} />
             )}
@@ -154,7 +148,7 @@ export const Table = () => {
                 <EditModal car={selectedCar} closeModal={() => setEditModalOpen(false)} saveChanges={saveChanges} />
             )}
             {deleteModalOpen && (
-                <DeleteModal car={selectedCar} closeModal={closeDeleteModal} onDelete={handleDelete} />
+                <DeleteModal car={selectedCar} closeModal={() => setDeleteModalOpen(false)} onDelete={handleDelete} />
             )}
         </div>
     );

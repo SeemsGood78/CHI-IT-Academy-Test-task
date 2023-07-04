@@ -1,5 +1,3 @@
-import classNames from "classnames";
-
 const range = (start, end) => {
   return [...Array(end - start).keys()].map((el) => el + start);
 };
@@ -20,14 +18,15 @@ const getPagesCut = ({ pagesCount, pagesCutCount, currentPage }) => {
 };
 
 const PaginationItem = ({ page, currentPage, onPageChange, isDisabled }) => {
-  const liClasses = classNames({
-    "page-item": true,
-    active: page === currentPage,
-    disabled: isDisabled,
-  });
+  const liClassName = `pagination-item ${page === currentPage ? "active" : ""} ${isDisabled ? "disabled" : ""}`;
+
+  const handleClick = () => {
+    onPageChange(page);
+  };
+
   return (
-    <li className={liClasses} onClick={() => onPageChange(page)}>
-      <span className="page-link">{page}</span>
+    <li className={liClassName} onClick={handleClick}>
+      <span className="pagination-item-link">{page}</span>
     </li>
   );
 };

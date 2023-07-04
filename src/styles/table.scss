@@ -1,106 +1,111 @@
-@import './variables.scss';
-
 .styled-table {
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    width: 100%;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
 
-    &>thead {
-        &>tr {
-            table-layout: fixed;
-            background-color: $azure;
-            color: $white;
-            text-align: left;
+  &>thead {
+    &>tr {
+      table-layout: fixed;
+      background-color: $azure;
+      color: $white;
+      text-align: left;
 
-            &>th {
-                padding: 12px 15px;
-            }
-        }
+      &>th {
+        padding: 12px 15px;
+      }
+    }
+  }
+
+  &>tbody {
+    &>:last-of-type {
+      border-bottom: 2px solid $azure;
     }
 
-    &>tbody {
-        &>:last-of-type {
-            border-bottom: 2px solid $azure;
-        }
+    &>tr {
+      &:nth-of-type(even) {
+        background-color: $graybg;
+      }
 
-        &>tr {
-            &:nth-of-type(even) {
-                background-color: $graybg;
-            }
+      border-bottom: 1px solid $gratbot;
 
-            border-bottom: 1px solid $gratbot;
-
-            &>td {
-                padding: 12px 15px;
-            }
-        }
+      &>td {
+        padding: 12px 15px;
+      }
     }
+  }
 }
 
 .pagination {
-    display: inline-block;
-    padding-left: 0;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 0.25rem;
-  }
-  .page-item {
+  display: inline-block;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  &-item {
     display: inline;
-  }
-  .page-item:first-child .page-link {
-    margin-left: 0;
-    border-bottom-left-radius: 0.25rem;
-    border-top-left-radius: 0.25rem;
-  }
-  .page-item:last-child .page-link {
-    border-bottom-right-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-  }
-  .page-item.active .page-link,
-  .page-item.active .page-link:focus,
-  .page-item.active .page-link:hover {
-    z-index: 2;
-    color: #fff;
-    cursor: default;
-    background-color: $azure;
-    border-color: $azure;
-  }
-  .page-item.disabled .page-link,
-  .page-item.disabled .page-link:focus,
-  .page-item.disabled .page-link:hover {
-    color: #818a91;
-    pointer-events: none;
-    cursor: not-allowed;
-    background-color: #fff;
-    border-color: #ddd;
-  }
-  .page-link {
-    position: relative;
-    float: left;
-    padding: 0.5rem 0.75rem;
-    margin-left: -1px;
-    color: $azure;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    cursor: pointer;
-  }
-  .page-link:focus,
-  .page-link:hover {
-    color: $azure;
-    background-color: #eceeef;
-    border-color: #ddd;
-  }
 
-// .styled-table tbody tr.active-row {
-//     font-weight: bold;
-//     color: $azure;
-// }
+    &:first-child .pagination-item-link {
+      margin-left: 0;
+      border-bottom-left-radius: 0.25rem;
+      border-top-left-radius: 0.25rem;
+    }
 
-// .styled-table thead {
-//    table-layout: fixed;
-// }
+    &:last-child .pagination-item-link {
+      border-bottom-right-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+    }
+
+    &.active .pagination-item-link,
+    &.active .pagination-item-link:focus,
+    &.active .pagination-item-link:hover {
+      z-index: 2;
+      color: $white;
+      cursor: default;
+      background-color: $azure;
+      border-color: $azure;
+    }
+
+    &.disabled .pagination-item-link,
+    &.disabled .pagination-item-link:focus,
+    &.disabled .pagination-item-link:hover {
+      color: $darkgray;
+      pointer-events: none;
+      background-color: $white;
+      border-color: $darkgray;
+    }
+
+    &-link {
+      position: relative;
+      float: left;
+      padding: 0.5rem 0.75rem;
+      margin-left: -1px;
+      color: $azure;
+      background-color: $white;
+      border: 1px solid $darkgray;
+      cursor: pointer;
+
+      &:focus,
+      &:hover {
+        color: $azure;
+        background-color: $gratbot;
+        border-color: $darkgray;
+      }
+    }
+  }
+}
+
+.add-btn{
+  display: inline-block;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  background: $azure;
+  color: $white;
+  cursor: pointer;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}

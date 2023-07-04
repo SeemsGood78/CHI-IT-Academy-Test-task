@@ -23,7 +23,7 @@ const Dropdown = ({ options, onSelect, car }) => {
             <div
               key={option}
               onClick={() => handleOptionClick(option)}
-              className="dropdown-item"
+              className="dropdown-menu-item"
             >
               {option}
             </div>
